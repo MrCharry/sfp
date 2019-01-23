@@ -28,7 +28,7 @@ import matplotlib as plt
 def merge_cell(sheet):
 	rt = {}
 	if sheet.merged_cells:
-		#存在合并单元格
+		#存在合并单元格12`
 		for item in sheet.merged_cells:		
 			for row in range(item[0], item[1]):
 				for col in range(item[2], item[3]):
@@ -346,10 +346,10 @@ if __name__ == '__main__':
 	wvmodel = gensim.models.KeyedVectors.load_word2vec_format('./phrase.vector', binary=False, encoding='utf-8')
 	weight = get_weight(wvmodel, vocab, vocab_size, embed_size)
 
-	net = SentimentNet(vocab_size=(vocab_size+1), embed_size=embed_size,
-						num_hiddens=num_hiddens, num_layers=num_layers,
-						bidirectional=bidirectional, weight=weight,
-						labels=labels, use_gpu=use_gpu)
+	# net = SentimentNet(vocab_size=(vocab_size+1), embed_size=embed_size,
+	# 					num_hiddens=num_hiddens, num_layers=num_layers,
+	# 					bidirectional=bidirectional, weight=weight,
+	# 					labels=labels, use_gpu=use_gpu)
 	# net = textCNN(vocab_size=vocab_size+1, embed_size=embed_size,
 	# 	seq_len=500, labels=labels, weight=weight)
 
@@ -363,7 +363,23 @@ if __name__ == '__main__':
 	train_iter = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
 	test_iter = torch.utils.data.DataLoader(test_set, batch_size=batch_size, shuffle=False)
 
-	softmax = nn.Softmax()
+
+# from sklearn import model_selection
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.neighbors import KNeighborsClassifier
+# from sklearn.naive_bayes import GaussianNB 
+# from sklearn.ensemble import RandomForestClassifier
+# from mlxtend.classifier import StackingClassifier
+# import numpy as np
+ 
+# clf1 = KNeighborsClassifier(n_neighbors=1)
+# clf2 = RandomForestClassifier(random_state=1)
+# clf3 = GaussianNB()
+# main_clf = textCNN()
+# sclf = StackingClassifier(classifiers=[clf1, clf2, clf3], 
+#                           meta_classifier=main_clf)
+
+	# softmax = nn.Softmax()
 	for epoch in range(num_epochs):
 		start = time.time()
 		n, m = 0, 0
