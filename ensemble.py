@@ -2,6 +2,8 @@ import Config.config as config
 import numpy as np
 import Agent.AgentSet as Agents
 import torch
+from sklearn.metrics import confusion_matrix
+
 
 class Ensemble(object):
 
@@ -14,7 +16,7 @@ class Ensemble(object):
         util = self.util
         agents = util.model_loader('./Model/')
         if len(agents) == 0:
-        # 模型加载失败，重新训练模型
+            # 模型加载失败，重新训练模型
             print('Begain retraining...')
             # 分别在数据集上训练出CNN和LSTM模型
             agents = []
@@ -48,15 +50,16 @@ class Ensemble(object):
             predictedset.append(predicted)
 
         # 拼接目标类标
-        target = []
+        targets = []
         for y_tests in util.y_testset:
-            target += y_tests.numpy().tolist()
+            targets += y_tests.numpy().tolist()
 
         correct = 0
         i = -config.BATCH_SIZE
         class_correct = list(0. for i in range(config.CLASS_NUM))
         class_total = list(0. for i in range(config.CLASS_NUM))
-        confusion_matrix = np.zeros((config.CLASS_NUM, config.CLASS_NUM))
+        ensemble_predicteds = []
+        # confusion_matrix = np.zeros((config.CLASS_NUM, config.CLASS_NUM))
         # predictedset 包含10个predicted集合，分别为5个CNN和5个LSTM在测试集上的预测结果
         # 遍历10个predicted集合，对预测标签进行打分，取得分最高的类标作为集成模型的输出
         for p0, p1, p2, p3, p4, p5, p6, p7, p8, p9 in zip(predictedset[0], predictedset[1], predictedset[2],
@@ -76,15 +79,22 @@ class Ensemble(object):
             for j, item in enumerate(p):
                 # 遍历所有训练好的模型，对每个模型的训练结果进行投票，选出最佳的结果保存在ensemble_predicted
                 ensemble_predicted = util.max_appearance_in_list(item.tolist())
-                if ensemble_predicted == target[i+j]:
+                ensemble_predicteds.append(ensemble_predicted)
+                if ensemble_predicted == targets[i+j]:
                     correct += 1
                     class_correct[ensemble_predicted] += 1
                 class_total[ensemble_predicted] += 1
         print('Accuracy of the Ensemble Network: ', correct / i, 'Total samples: ', i)
 
+        # 输出每个类目判断的准确度
         for k in range(config.CLASS_NUM):
             if class_total[k] == 0:
                 class_correct_rate = 0
             else:
                 class_correct_rate = class_correct[k] / class_total[k]
             print('Accuracy of ', util.CLASSES[k], ': ', class_correct_rate)
+
+        # 画出预测结果的混淆矩阵
+        cmat = confusion_matrix(ensemble_predicteds, targets)
+        util.draw_confusion_matrix(cmat, './confusion_matrix.jpeg')
+

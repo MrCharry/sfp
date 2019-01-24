@@ -1,3 +1,4 @@
+from __future__ import division
 import xlrd
 import jieba
 import torch
@@ -5,6 +6,12 @@ from sklearn.model_selection import KFold
 import numpy as np
 import Config.config as config
 import gensim
+from skimage import io, color
+from PIL import Image, ImageDraw, ImageFont
+import os
+
+np.seterr(divide='ignore', invalid='ignore')
+
 
 class Utility(object):
 
@@ -208,7 +215,8 @@ class Utility(object):
 				temp = lt.count(item)
 		return max_appearance_item
 
-	def model_loader(self, path):
+	@staticmethod
+	def model_loader(path):
 		agents = []
 		for i in range(config.AGENT_NUM*2):
 			try:
@@ -218,6 +226,30 @@ class Utility(object):
 				return []
 		print('Load model successfully...')
 		return agents
+
+	@staticmethod
+	def draw_confusion_matrix(matrix, path):
+		# Display different color for different elements
+		lines, cols = matrix.shape
+		sumline = matrix.sum(axis=1).reshape(lines, 1)
+		ratiomat = matrix / sumline
+		toplot0 = 1 - ratiomat
+		toplot = toplot0.repeat(50).reshape(lines, -1).repeat(50, axis=0)
+		io.imsave(path, color.gray2rgb(toplot))
+		# Draw values on every block
+		image = Image.open(path)
+		draw = ImageDraw.Draw(image)
+		font = ImageFont.truetype(os.path.join(os.getcwd(), "Draw/arial.ttf"), 15)
+		for i in range(lines):
+			for j in range(cols):
+				dig = str(matrix[i, j])
+				if i == j:
+					filled = (255, 181, 197)
+				else:
+					filled = (46, 139, 87)
+				draw.text((50 * j + 10, 50 * i + 10), dig, font=font, fill=filled)
+		image.save(path)
+
 	# def tag2Desc(output, labels, kinds):
 	#
 	# 	score = 0
