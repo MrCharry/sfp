@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fe84fe39-558e-4cc0-b4cf-8dfc7be1fc3e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Draw/arial.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model1.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model1.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model10.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model10.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model2.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model2.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model3.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model3.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model4.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model4.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model5.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model5.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model6.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model6.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model7.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model7.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model8.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model8.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/model9.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Model/model9.pth" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Utility/Utility.py" beforeDir="false" afterPath="$PROJECT_DIR$/Utility/Utility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/confusion_matrix.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/damo.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ensemble.py" beforeDir="false" afterPath="$PROJECT_DIR$/ensemble.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ensemble.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1037">
-              <caret line="94" column="21" selection-start-line="94" selection-start-column="21" selection-end-line="94" selection-end-column="21" />
+            <state relative-caret-position="340">
+              <caret line="26" column="57" lean-forward="true" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -88,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Utility/Utility.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3695">
-              <caret line="97" column="28" lean-forward="true" selection-start-line="97" selection-start-column="28" selection-end-line="97" selection-end-column="28" />
+            <state relative-caret-position="289">
+              <caret line="89" column="68" selection-start-line="89" selection-start-column="68" selection-end-line="89" selection-end-column="68" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -124,6 +109,7 @@
       <find>root</find>
       <find>root2</find>
       <find>root1</find>
+      <find>880+440</find>
     </findStrings>
     <replaceStrings>
       <replace>build_map_of_class</replace>
@@ -132,6 +118,7 @@
       <replace>root2</replace>
       <replace>win1</replace>
       <replace>root</replace>
+      <replace>1000+500</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -148,8 +135,8 @@
         <option value="$PROJECT_DIR$/Model/Agent.py" />
         <option value="$PROJECT_DIR$/Config/config.py" />
         <option value="$PROJECT_DIR$/Agent/Agent.py" />
-        <option value="$PROJECT_DIR$/ensemble.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/ensemble.py" />
         <option value="$PROJECT_DIR$/Utility/Utility.py" />
       </list>
     </option>
@@ -441,27 +428,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Config/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/python3.6/tkinter/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="146">
           <caret line="1704" selection-start-line="1704" selection-end-line="1704" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Utility/Utility.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3695">
-          <caret line="97" column="28" lean-forward="true" selection-start-line="97" selection-start-column="28" selection-end-line="97" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -475,12 +445,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Config/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ensemble.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="94" column="21" selection-start-line="94" selection-start-column="21" selection-end-line="94" selection-end-column="21" />
+        <state relative-caret-position="340">
+          <caret line="26" column="57" lean-forward="true" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utility/Utility.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="89" column="68" selection-start-line="89" selection-start-column="68" selection-end-line="89" selection-end-column="68" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>

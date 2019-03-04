@@ -4,10 +4,11 @@ import Agent.AgentSet as Agents
 import torch
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
-from sklearn.metrics import roc_auc_score, auc
+import tkinter
+# from sklearn.metrics import precision_score
+# from sklearn.metrics import recall_score
+# from sklearn.metrics import f1_score
+# from sklearn.metrics import roc_auc_score, auc
 
 
 class Ensemble(object):
@@ -15,11 +16,20 @@ class Ensemble(object):
     def __init__(self, util, **kwargs):
         super(Ensemble, self).__init__(**kwargs)
         self.util = util
+        try:
+            if util.begintrain:
+                self.ensemble_train()
+            elif util.begintest:
+                self.ensemble_test()
+        except Exception as e:
+            win = tkinter.Toplevel(util.win1)
+            win.title('提示')
+            tkinter.Label(win, text='请选择正确的文件路径！').pack()
 
     def ensemble_train(self):
 
         util = self.util
-        agents = util.model_loader('./Model/')
+        agents = util.model_loader(util.modelpath)
         if len(agents) == 0:
             # 模型加载失败，重新训练模型
             print('Begin retraining...')

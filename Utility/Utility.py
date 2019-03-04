@@ -23,7 +23,7 @@ class Utility(object):
 		filename = filedialog.askopenfilename(title='选择数据源', filetypes=[('文本文档', '*.txt'),
 																		('excel文件', '*.xlsx;*.xls'), ('所有文件', '*')])
 		if not filename:
-			pass
+			self.filename = False
 		else:
 			self.textvar1.set(filename)
 			self.filename = filename
@@ -32,15 +32,15 @@ class Utility(object):
 		testdatapath = filedialog.askopenfilename(title='选择测试数据', filetypes=[('文本文档', '*.txt'),
 																		('excel文件', '*.xlsx;*.xls'), ('所有文件', '*')])
 		if not testdatapath:
-			pass
+			self.testdatapath = False
 		else:
 			self.textvar4.set(testdatapath)
 			self.testdatapath = testdatapath
 
 	def select_model(self):
-		modelpath = filedialog.askopenfilename(title='选择模型', filetypes=[('模型文件', '*.pth')])
+		modelpath = filedialog.askdirectory(title='选择模型文件夹')
 		if not modelpath:
-			pass
+			self.modelpath = False
 		else:
 			self.textvar3.set(modelpath)
 			self.modelpath = modelpath
@@ -49,17 +49,58 @@ class Utility(object):
 		pass
 
 	def begin_train(self):
+		try:
+			if self.filename and self.modelpath:
+				tkinter.Label(self.root, text='开始训练任务，请耐心等待...').pack()
+			else:
+				notice = tkinter.Toplevel(self.root)
+				notice.title('提示')
+				notice.geometry('240x120+1000+500')
+				tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
+				tkinter.Button(notice, text='确定', command=notice.destroy).pack()
+				return
+		except Exception as e:
+			notice = tkinter.Toplevel(self.root)
+			notice.title('提示')
+			notice.geometry('240x120+1000+500')
+			tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
+			tkinter.Button(notice, text='确定', command=notice.destroy).pack()
+			return
+
 		self.data_for_train()
+		self.root.destroy()
+		self.begintrain = True
 
 	def begin_test(self):
-		pass
+		try:
+			if self.testdatapath and self.modelpath:
+				tkinter.Label(self.win1, text='开始测试任务，请耐心等待...').pack()
+			else:
+				notice = tkinter.Toplevel(self.win1)
+				notice.title('提示')
+				notice.geometry('240x120+1000+500')
+				tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
+				tkinter.Button(notice, text='确定', command=notice.destroy).pack()
+				return
+		except Exception as e:
+			notice = tkinter.Toplevel(self.win1)
+			notice.title('提示')
+			notice.geometry('240x120+1000+500')
+			tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
+			tkinter.Button(notice, text='确定', command=notice.destroy).pack()
+			return
+
+		self.data_for_train()
+		self.win1.destroy()
+		self.begintest = True
 
 	def select_model_panel(self):
 
 		win1 = tkinter.Toplevel(self.root)
+		self.win1 = win1
 		win1.title('选择模型文件')
 		win1.geometry('640x320+800+400')
-		win1.wm_attributes('-topmost', 1)
+		# win1.wm_attributes('-topmost', 1)
 		win1.resizable(0, 0)
 
 		frame = tkinter.Frame(win1)
@@ -334,7 +375,7 @@ class Utility(object):
 			except:
 				print('Can not find the model file, start retrain model...')
 				return []
-		print('Load model successfully...')
+		print('Load models successfully...')
 		return agents
 
 	@staticmethod
