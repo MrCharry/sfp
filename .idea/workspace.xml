@@ -142,8 +142,13 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< Updated upstream
     <option name="x" value="943" />
     <option name="y" value="81" />
+=======
+    <option name="x" value="639" />
+    <option name="y" value="78" />
+>>>>>>> Stashed changes
     <option name="width" value="1362" />
     <option name="height" value="906" />
   </component>
