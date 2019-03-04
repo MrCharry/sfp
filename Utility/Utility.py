@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import tkinter
 from tkinter import filedialog
+from tkinter import ttk
 # import threading
 
 
@@ -29,13 +30,13 @@ class Utility(object):
 			self.filename = filename
 
 	def select_test_data(self):
-		testdatapath = filedialog.askopenfilename(title='选择测试数据', filetypes=[('文本文档', '*.txt'),
+		filename = filedialog.askopenfilename(title='选择测试数据', filetypes=[('文本文档', '*.txt'),
 																		('excel文件', '*.xlsx;*.xls'), ('所有文件', '*')])
-		if not testdatapath:
-			self.testdatapath = False
+		if not filename:
+			self.filename = False
 		else:
-			self.textvar4.set(testdatapath)
-			self.testdatapath = testdatapath
+			self.textvar4.set(filename)
+			self.filename = filename
 
 	def select_model(self):
 		modelpath = filedialog.askdirectory(title='选择模型文件夹')
@@ -46,7 +47,12 @@ class Utility(object):
 			self.modelpath = modelpath
 
 	def save_model(self):
-		pass
+		savemodelpath = filedialog.askdirectory(title='选择模型存放位置')
+		if not savemodelpath:
+			self.savemodelpath = False
+		else:
+			self.textvar2.set(savemodelpath)
+			self.savemodelpath = savemodelpath
 
 	def begin_train(self):
 		try:
@@ -67,13 +73,14 @@ class Utility(object):
 			tkinter.Button(notice, text='确定', command=notice.destroy).pack()
 			return
 
-		self.data_for_train()
 		self.root.destroy()
+		self.data_for_train()
 		self.begintrain = True
+		# self.progress_bar()
 
 	def begin_test(self):
 		try:
-			if self.testdatapath and self.modelpath:
+			if self.filename and self.modelpath:
 				tkinter.Label(self.win1, text='开始测试任务，请耐心等待...').pack()
 			else:
 				notice = tkinter.Toplevel(self.win1)
@@ -90,9 +97,11 @@ class Utility(object):
 			tkinter.Button(notice, text='确定', command=notice.destroy).pack()
 			return
 
-		self.data_for_train()
 		self.win1.destroy()
+		self.root.destroy()
+		self.data_for_train()
 		self.begintest = True
+		# self.progress_bar()
 
 	def select_model_panel(self):
 
@@ -132,6 +141,8 @@ class Utility(object):
 
 	def __init__(self):
 		# self.filename = filename
+		self.begintrain = False
+		self.begintest = False
 		self.wvmodel = gensim.models.KeyedVectors.load_word2vec_format('./phrase.vector', binary=False, encoding='utf-8')
 
 		root = tkinter.Tk()
@@ -336,6 +347,14 @@ class Utility(object):
 		self.shard_data()
 		# return train_features, train_labels, test_features, test_labels, vocab, vocab_size
 
+	def data_for_test(self):
+		self.tokenize_data()
+		self.encode_samples()
+		self.pad_samples()
+		self.labels = [tag for _, tag in self.data_tokenized]
+		self.X_testset = self.features
+		self.y_testset = self.labels
+
 	def init_weight(self):
 
 		vocab, vocab_size, embed_size = self.vocab, self.vocab_size, config.EMBED_SIZE
@@ -369,9 +388,10 @@ class Utility(object):
 	@staticmethod
 	def model_loader(path):
 		agents = []
+		print(path)
 		for i in range(config.AGENT_NUM*2):
 			try:
-				agents.append(torch.load(path + 'model' + str(i+1) + '.pth'))
+				agents.append(torch.load(path + '/model' + str(i+1) + '.pth'))
 			except:
 				print('Can not find the model file, start retrain model...')
 				return []
@@ -400,6 +420,17 @@ class Utility(object):
 					filled = (46, 139, 87)
 				draw.text((50 * j + 10, 50 * i + 10), dig, font=font, fill=filled)
 		image.save(path)
+	#
+	# def progress_bar(self):
+	# 	progressbar = tkinter.Tk()
+	# 	self.progressbar = progressbar
+	# 	progressbar.resizable(0, 0)
+	# 	progressbar.title('请耐心等待任务完成...')
+	# 	progressbar.geometry('300x120+1000+500')
+	# 	p = ttk.Progressbar(progressbar, length=300, mode="indeterminate", orient=tkinter.HORIZONTAL)
+	# 	p.pack(pady=30)
+	# 	p.start()
+	# 	progressbar.protocol('WM_DELETE_WINDOW', lambda _: None)
 
 	# def tag2Desc(output, labels, kinds):
 	#

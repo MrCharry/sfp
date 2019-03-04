@@ -22,44 +22,43 @@ class Ensemble(object):
             elif util.begintest:
                 self.ensemble_test()
         except Exception as e:
-            win = tkinter.Toplevel(util.win1)
-            win.title('提示')
-            tkinter.Label(win, text='请选择正确的文件路径！').pack()
+            print(e)
 
     def ensemble_train(self):
 
         util = self.util
-        agents = util.model_loader(util.modelpath)
-        if len(agents) == 0:
-            # 模型加载失败，重新训练模型
-            print('Begin retraining...')
-            # 分别在数据集上训练出CNN和LSTM模型
-            agents = []
-            for i in range(config.AGENT_NUM):
-                # 每次采取不同的初始化矩阵进行训练
-                util.init_weight()
-                print('The ', i+1, ' round: ')
-                agentCNN = Agents.CNN(vocab_size=util.vocab_size, weight=util.weight)
-                agentLSTM = Agents.LSTM(vocab_size=util.vocab_size, weight=util.weight)
-                agentCNN.trainOn(X_trainset=util.X_trainset, y_trainset=util.y_trainset)
-                agentLSTM.trainOn(X_trainset=util.X_trainset, y_trainset=util.y_trainset)
-                agents.append(agentCNN)
-                agents.append(agentLSTM)
-                # 将训练好的模型保存在agents里
-                torch.save(agentCNN, './Model/model'+str(i*2+1)+'.pth')
-                torch.save(agentLSTM, './Model/model'+str(i*2+2)+'.pth')
-            self.agents = agents
-            print('Training finished...')
-        else:
-            self.agents = agents
+        # agents = util.model_loader(util.modelpath)
+        # if len(agents) == 0:
+        #     # 模型加载失败，重新训练模型
+        #     print('Begin retraining...')
+        #     # 分别在数据集上训练出CNN和LSTM模型
+        #     agents = []
+        for i in range(config.AGENT_NUM):
+            # 每次采取不同的初始化矩阵进行训练
+            util.init_weight()
+            print('The ', i+1, ' round: ')
+            agentCNN = Agents.CNN(vocab_size=util.vocab_size, weight=util.weight)
+            agentLSTM = Agents.LSTM(vocab_size=util.vocab_size, weight=util.weight)
+            agentCNN.trainOn(X_trainset=util.X_trainset, y_trainset=util.y_trainset)
+            agentLSTM.trainOn(X_trainset=util.X_trainset, y_trainset=util.y_trainset)
+            agents.append(agentCNN)
+            agents.append(agentLSTM)
+            # 将训练好的模型保存在agents里
+            torch.save(agentCNN, './Model/model'+str(i*2+1)+'.pth')
+            torch.save(agentLSTM, './Model/model'+str(i*2+2)+'.pth')
+        # self.agents = agents
+        print('Training finished...')
+        # else:
+        #     self.agents = agents
 
     def ensemble_test(self):
 
         # 开始测试过程
         predictedset = []
         # batch_size = config.BATCH_SIZE
-        agents = self.agents
         util = self.util
+        agents = util.model_loader(util.modelpath)
+
         for agent in agents:
             predicted = agent.testOn(X_testset=util.X_testset, y_testset=util.y_testset)
             predictedset.append(predicted)
@@ -119,3 +118,5 @@ class Ensemble(object):
         cmat = confusion_matrix(ensemble_predicteds, targets)
         util.draw_confusion_matrix(cmat, './Out/confusion_matrix.jpeg')
 
+    def ensemble_prediction(self):
+        pass
