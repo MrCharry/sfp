@@ -3,6 +3,11 @@ import numpy as np
 import Agent.AgentSet as Agents
 import torch
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import roc_auc_score, auc
 
 
 class Ensemble(object):
@@ -17,7 +22,7 @@ class Ensemble(object):
         agents = util.model_loader('./Model/')
         if len(agents) == 0:
             # 模型加载失败，重新训练模型
-            print('Begain retraining...')
+            print('Begin retraining...')
             # 分别在数据集上训练出CNN和LSTM模型
             agents = []
             for i in range(config.AGENT_NUM):
@@ -84,17 +89,23 @@ class Ensemble(object):
                     correct += 1
                     class_correct[ensemble_predicted] += 1
                 class_total[ensemble_predicted] += 1
-        print('Accuracy of the Ensemble Network: ', correct / i, 'Total samples: ', i)
+        # print('Accuracy of the Ensemble Network: ', correct / i, 'Total samples: ', i)
 
         # 输出每个类目判断的准确度
-        for k in range(config.CLASS_NUM):
-            if class_total[k] == 0:
-                class_correct_rate = 0
-            else:
-                class_correct_rate = class_correct[k] / class_total[k]
-            print('Accuracy of ', util.CLASSES[k], ': ', class_correct_rate)
+        with open('./Out/out.txt', 'a') as f:
+            # 所有样本中被预测正确的样本的比率（包含了所有class的总体准确率）
+            f.write('Accuracy of the all samples with Ensemble Network: %.2f\n'
+                    %(accuracy_score(targets, ensemble_predicteds)))
+            f.write('Accuracy\tPrecision\tRecall\tF1\t\n')
+            for k in range(config.CLASS_NUM):
+                if class_total[k] == 0:
+                    class_correct_rate = 0
+                else:
+                    class_correct_rate = class_correct[k] / class_total[k]
+                print('Accuracy of ', util.CLASSES[k], ': ', class_correct_rate)
+                f.write('%s %.2f\n' % (util.CLASSES[k], class_correct_rate))
 
         # 画出预测结果的混淆矩阵
         cmat = confusion_matrix(ensemble_predicteds, targets)
-        util.draw_confusion_matrix(cmat, './confusion_matrix.jpeg')
+        util.draw_confusion_matrix(cmat, './Out/confusion_matrix.jpeg')
 
