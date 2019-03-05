@@ -5,6 +5,7 @@ from tkinter import messagebox
 from Utility.Utility import Utility
 from ensemble import Ensemble
 import threading
+from tkinter import ttk
 
 
 class Interface(object):
@@ -43,13 +44,35 @@ class Interface(object):
             self.textvar2.set(savemodelpath)
             self.util.savemodelpath = savemodelpath
 
+    def thread_assistant_func1(self):
+        self.util.data_for_train()
+        self.ensemble.ensemble_train()
+        # self.thrain_done = True
+
     def begin_train(self):
         try:
             if self.util.filename and self.util.savemodelpath:
-                # tkinter.Label(self.root, text='开始训练任务，请耐心等待...').pack()
-                messagebox.showinfo('提示', '开始训练任务，请耐心等待...')
-                self.util.data_for_train()
-                self.ensemble.ensemble_train()
+                # tkinter.Label(, text='开始训练任务，请耐心等待...').pack()
+                # messagebox.showinfo('提示', '开始训练任务，请耐心等待...')
+                win = tkinter.Toplevel()
+                win.title('提示')
+                win.geometry('320x160+960+480')
+                tkinter.Label(win, text='训练中，请耐心等待...').grid(row=1, column=1)
+                p = ttk.Progressbar(win, length=200, mode='indeterminate', orient=tkinter.HORIZONTAL)
+                p.grid(row=2, column=1)
+                p.start()
+                win.protocol('WM_DELETE_WINDOW', lambda _: None)
+
+                # self.train_done = False
+                thread = threading.Thread(target=self.thread_assistant_func1, args=())
+                thread.setDaemon(True)
+                thread.start()
+                while not self.train_done:
+                    pass
+                win.destroy()
+                messagebox.showinfo('提示', '训练任务已完成!')
+                # self.util.data_for_train()
+                # self.ensemble.ensemble_train()
             else:
                 messagebox.showwarning('警告', '请输入正确的文件路径!')
                 return
@@ -58,13 +81,36 @@ class Interface(object):
             messagebox.showwarning('警告', '请输入正确的文件路径!')
             return
 
+    def thread_assistant_func2(self, win):
+        self.util.data_for_train()
+        self.ensemble.ensemble_test()
+        # self.event.set()
+        # self.test_done = True
+        win.destroy()
+        messagebox.showinfo('提示', '测试任务已完成!')
+
     def begin_test(self):
         try:
             if self.util.filename and self.util.modelpath:
-                messagebox.showinfo('提示', '开始测试任务，请耐心等待...')
-                self.util.data_for_train()
-                self.ensemble.ensemble_test()
-                # tkinter.Label(self.win1, text='开始测试任务，请耐心等待...').pack()
+                win = tkinter.Toplevel()
+                win.title('提示')
+                win.geometry('320x160+960+480')
+                tkinter.Label(win, text='测试中，请耐心等待...').pack(pady=10)
+                p = ttk.Progressbar(win, length=200, mode='indeterminate', orient=tkinter.HORIZONTAL)
+                p.pack(pady=10)
+                p.start()
+                win.protocol('WM_DELETE_WINDOW', lambda _: None)
+
+                # self.test_done = False
+                # self.event = threading.Event()
+                thread = threading.Thread(target=self.thread_assistant_func2, args=(win,))
+                thread.start()
+                # thread.join()
+                # self.event.wait()
+                # messagebox.showinfo('提示', '开始测试任务，请耐心等待...')
+                # self.util.data_for_train()
+                # self.ensemble.ensemble_test()
+                # tkinter.Label(, text='开始测试任务，请耐心等待...').pack()
             else:
                 messagebox.showwarning('警告', '请输入正确的文件路径!')
                 return
@@ -75,8 +121,7 @@ class Interface(object):
 
     def select_model_panel(self):
 
-        win1 = tkinter.Toplevel(self.root)
-        self.win1 = win1
+        win1 = tkinter.Toplevel()
         win1.title('选择模型文件')
         win1.geometry('640x320+800+400')
         # win1.wm_attributes('-topmost', 1)
@@ -116,10 +161,10 @@ class Interface(object):
         self.util = util
 
         root = tkinter.Tk()
-        self.root = root
         root.title('选择训练文件')
         root.geometry('640x320+800+400')
         root.resizable(0, 0)
+        self.root = root
 
         frame = tkinter.Frame(root)
         frame.pack(pady=34)
@@ -150,5 +195,4 @@ class Interface(object):
         tkinter.Button(row3, text='读取模型', font='arial', command=self.select_model_panel).pack(
             side=tkinter.LEFT, padx=20)
         row3.pack(side=tkinter.BOTTOM, pady=10)
-        root.mainloop()
 
