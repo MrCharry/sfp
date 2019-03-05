@@ -16,13 +16,6 @@ class Ensemble(object):
     def __init__(self, util, **kwargs):
         super(Ensemble, self).__init__(**kwargs)
         self.util = util
-        try:
-            if util.begintrain:
-                self.ensemble_train()
-            elif util.begintest:
-                self.ensemble_test()
-        except Exception as e:
-            print(e)
 
     def ensemble_train(self):
 

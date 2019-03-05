@@ -1,8 +1,7 @@
-from Utility.Utility import Utility
-from ensemble import Ensemble
+# from Utility.Utility import Utility
+# from ensemble import Ensemble
+from Tkinter.Interface import Interface
 
 
 if __name__ == '__main__':
-
-    util = Utility()
-    ensemble = Ensemble(util=util)
+    interface = Interface()

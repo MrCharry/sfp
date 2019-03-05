@@ -9,10 +9,6 @@ import gensim
 from skimage import io, color
 from PIL import Image, ImageDraw, ImageFont
 import os
-import tkinter
-from tkinter import filedialog
-from tkinter import ttk
-# import threading
 
 
 np.seterr(divide='ignore', invalid='ignore')
@@ -20,167 +16,10 @@ np.seterr(divide='ignore', invalid='ignore')
 
 class Utility(object):
 
-	def select_train_data(self):
-		filename = filedialog.askopenfilename(title='选择数据源', filetypes=[('文本文档', '*.txt'),
-																		('excel文件', '*.xlsx;*.xls'), ('所有文件', '*')])
-		if not filename:
-			self.filename = False
-		else:
-			self.textvar1.set(filename)
-			self.filename = filename
-
-	def select_test_data(self):
-		filename = filedialog.askopenfilename(title='选择测试数据', filetypes=[('文本文档', '*.txt'),
-																		('excel文件', '*.xlsx;*.xls'), ('所有文件', '*')])
-		if not filename:
-			self.filename = False
-		else:
-			self.textvar4.set(filename)
-			self.filename = filename
-
-	def select_model(self):
-		modelpath = filedialog.askdirectory(title='选择模型文件夹')
-		if not modelpath:
-			self.modelpath = False
-		else:
-			self.textvar3.set(modelpath)
-			self.modelpath = modelpath
-
-	def save_model(self):
-		savemodelpath = filedialog.askdirectory(title='选择模型存放位置')
-		if not savemodelpath:
-			self.savemodelpath = False
-		else:
-			self.textvar2.set(savemodelpath)
-			self.savemodelpath = savemodelpath
-
-	def begin_train(self):
-		try:
-			if self.filename and self.modelpath:
-				tkinter.Label(self.root, text='开始训练任务，请耐心等待...').pack()
-			else:
-				notice = tkinter.Toplevel(self.root)
-				notice.title('提示')
-				notice.geometry('240x120+1000+500')
-				tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
-				tkinter.Button(notice, text='确定', command=notice.destroy).pack()
-				return
-		except Exception as e:
-			notice = tkinter.Toplevel(self.root)
-			notice.title('提示')
-			notice.geometry('240x120+1000+500')
-			tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
-			tkinter.Button(notice, text='确定', command=notice.destroy).pack()
-			return
-
-		self.root.destroy()
-		self.data_for_train()
-		self.begintrain = True
-		# self.progress_bar()
-
-	def begin_test(self):
-		try:
-			if self.filename and self.modelpath:
-				tkinter.Label(self.win1, text='开始测试任务，请耐心等待...').pack()
-			else:
-				notice = tkinter.Toplevel(self.win1)
-				notice.title('提示')
-				notice.geometry('240x120+1000+500')
-				tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
-				tkinter.Button(notice, text='确定', command=notice.destroy).pack()
-				return
-		except Exception as e:
-			notice = tkinter.Toplevel(self.win1)
-			notice.title('提示')
-			notice.geometry('240x120+1000+500')
-			tkinter.Label(notice, text='请输入正确的文件路径!').pack(pady=20)
-			tkinter.Button(notice, text='确定', command=notice.destroy).pack()
-			return
-
-		self.win1.destroy()
-		self.root.destroy()
-		self.data_for_train()
-		self.begintest = True
-		# self.progress_bar()
-
-	def select_model_panel(self):
-
-		win1 = tkinter.Toplevel(self.root)
-		self.win1 = win1
-		win1.title('选择模型文件')
-		win1.geometry('640x320+800+400')
-		# win1.wm_attributes('-topmost', 1)
-		win1.resizable(0, 0)
-
-		frame = tkinter.Frame(win1)
-		frame.pack(pady=34)
-
-		textvar3 = tkinter.StringVar()
-		textvar4 = tkinter.StringVar()
-		textvar3.set('选择已训练的模型')
-		textvar4.set('选择待预测的数据')
-		self.textvar3 = textvar3
-		self.textvar4 = textvar4
-		row1 = tkinter.Frame(frame)
-		label = tkinter.Label(row1, textvariable=self.textvar3, font='arial', bg="white", width=50, anchor='w')
-		label.pack(side=tkinter.LEFT)
-		tkinter.Button(row1, text='选择', font='arial', command=self.select_model).pack(
-			side=tkinter.LEFT, padx=10)
-		row1.pack(side=tkinter.TOP)
-
-		row2 = tkinter.Frame(frame)
-		tkinter.Label(row2, textvariable=self.textvar4, font='arial', bg="white", width=50, anchor='w').pack(
-			side=tkinter.LEFT)
-		tkinter.Button(row2, text='选择', font='arial', command=self.select_test_data).pack(
-			side=tkinter.LEFT, padx=10)
-		row2.pack(side=tkinter.TOP, pady=10)
-
-		row3 = tkinter.Frame(frame)
-		tkinter.Button(row3, text='开始预测', font='arial', command=self.begin_test).pack()
-		row3.pack(side=tkinter.BOTTOM, pady=10)
-
 	def __init__(self):
 		# self.filename = filename
-		self.begintrain = False
-		self.begintest = False
 		self.wvmodel = gensim.models.KeyedVectors.load_word2vec_format('./phrase.vector', binary=False, encoding='utf-8')
-
-		root = tkinter.Tk()
-		self.root = root
-		root.title('选择训练文件')
-		root.geometry('640x320+800+400')
-		root.resizable(0, 0)
-
-		frame = tkinter.Frame(root)
-		frame.pack(pady=34)
-
-		textvar1 = tkinter.StringVar()
-		textvar2 = tkinter.StringVar()
-		textvar1.set('选择待训练的数据源')
-		textvar2.set('选择存放模型的位置')
-		self.textvar1 = textvar1
-		self.textvar2 = textvar2
-		row1 = tkinter.Frame(frame)
-		tkinter.Label(row1, textvariable=self.textvar1, font='arial', bg="white", width=50, anchor='w').pack(
-			side=tkinter.LEFT)
-		tkinter.Button(row1, text='选择', font='arial', command=self.select_train_data).pack(
-			side=tkinter.LEFT, padx=10)
-		row1.pack(side=tkinter.TOP)
-
-		row2 = tkinter.Frame(frame)
-		tkinter.Label(row2, textvariable=self.textvar2, font='arial', bg="white", width=50, anchor='w').pack(
-			side=tkinter.LEFT)
-		tkinter.Button(row2, text='选择', font='arial', command=self.save_model).pack(
-			side=tkinter.LEFT, padx=10)
-		row2.pack(side=tkinter.TOP, pady=10)
-
-		row3 = tkinter.Frame(frame)
-		tkinter.Button(row3, text='开始训练', font='arial', command=self.begin_train).pack(
-			side=tkinter.LEFT, padx=20)
-		tkinter.Button(row3, text='读取模型', font='arial', command=self.select_model_panel).pack(
-			side=tkinter.LEFT, padx=20)
-		row3.pack(side=tkinter.BOTTOM, pady=10)
-		root.mainloop()
+		# self.data_for_train()
 
 	def merge_cell(self, sheet):
 		rt = {}
@@ -346,14 +185,6 @@ class Utility(object):
 		self.labels = [tag for _, tag in self.data_tokenized]
 		self.shard_data()
 		# return train_features, train_labels, test_features, test_labels, vocab, vocab_size
-
-	def data_for_test(self):
-		self.tokenize_data()
-		self.encode_samples()
-		self.pad_samples()
-		self.labels = [tag for _, tag in self.data_tokenized]
-		self.X_testset = self.features
-		self.y_testset = self.labels
 
 	def init_weight(self):
 
