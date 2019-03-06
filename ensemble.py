@@ -17,7 +17,7 @@ class Ensemble(object):
         super(Ensemble, self).__init__(**kwargs)
         self.util = util
 
-    def ensemble_train(self):
+    def ensemble_train(self, textvar5):
 
         util = self.util
         # agents = util.model_loader(util.modelpath)
@@ -30,17 +30,21 @@ class Ensemble(object):
             # 每次采取不同的初始化矩阵进行训练
             util.init_weight()
             print('The ', i+1, ' round: ')
+            # util.textvar5 = tkinter.StringVar()
+            textvar5.set('正在进行第 ' + str(i+1) + ' 轮训练...')
             agentCNN = Agents.CNN(vocab_size=util.vocab_size, weight=util.weight)
             agentLSTM = Agents.LSTM(vocab_size=util.vocab_size, weight=util.weight)
             agentCNN.trainOn(X_trainset=util.X_trainset, y_trainset=util.y_trainset)
             agentLSTM.trainOn(X_trainset=util.X_trainset, y_trainset=util.y_trainset)
-            agents.append(agentCNN)
-            agents.append(agentLSTM)
+            # agents.append(agentCNN)
+            # agents.append(agentLSTM)
             # 将训练好的模型保存在agents里
-            torch.save(agentCNN, './Model/model'+str(i*2+1)+'.pth')
-            torch.save(agentLSTM, './Model/model'+str(i*2+2)+'.pth')
+            # torch.save(agentCNN, './Model/model'+str(i*2+1)+'.pth')
+            # torch.save(agentLSTM, './Model/model'+str(i*2+2)+'.pth')
+            torch.save(agentCNN, util.savemodelpath+str(i*2+1)+'.model')
+            torch.save(agentLSTM, util.savemodelpath+str(i*2+2)+'.model')
         # self.agents = agents
-        print('Training finished...')
+        # print('Training finished...')
         # else:
         #     self.agents = agents
 

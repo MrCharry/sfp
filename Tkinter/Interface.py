@@ -6,6 +6,7 @@ from Utility.Utility import Utility
 from ensemble import Ensemble
 import threading
 from tkinter import ttk
+import time
 
 
 class Interface(object):
@@ -44,10 +45,11 @@ class Interface(object):
             self.textvar2.set(savemodelpath)
             self.util.savemodelpath = savemodelpath
 
-    def thread_assistant_func1(self):
+    def thread_assistant_func1(self, win, textvar5):
         self.util.data_for_train()
-        self.ensemble.ensemble_train()
-        # self.thrain_done = True
+        self.ensemble.ensemble_train(textvar5)
+        win.destroy()
+        messagebox.showinfo('提示', '训练任务已完成! 模型文件已保存到' + self.util.modelpath)
 
     def begin_train(self):
         try:
@@ -57,20 +59,17 @@ class Interface(object):
                 win = tkinter.Toplevel()
                 win.title('提示')
                 win.geometry('320x160+960+480')
-                tkinter.Label(win, text='训练中，请耐心等待...').grid(row=1, column=1)
+                textvar5 = tkinter.StringVar()
+                textvar5.set('开始训练任务，请耐心等待...')
+                # self.util.textvar5 = textvar5
+                tkinter.Label(win, textvariable=textvar5).pack(pady=10)
                 p = ttk.Progressbar(win, length=200, mode='indeterminate', orient=tkinter.HORIZONTAL)
-                p.grid(row=2, column=1)
+                p.pack(pady=10)
                 p.start()
-                win.protocol('WM_DELETE_WINDOW', lambda _: None)
-
-                # self.train_done = False
-                thread = threading.Thread(target=self.thread_assistant_func1, args=())
-                thread.setDaemon(True)
+                win.protocol('WM_DELETE_WINDOW', lambda: None)
+                thread = threading.Thread(target=self.thread_assistant_func1, args=(win, textvar5))
                 thread.start()
-                while not self.train_done:
-                    pass
-                win.destroy()
-                messagebox.showinfo('提示', '训练任务已完成!')
+                # messagebox.showinfo('提示', '训练任务已完成!')
                 # self.util.data_for_train()
                 # self.ensemble.ensemble_train()
             else:
